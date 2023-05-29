@@ -7,6 +7,7 @@ declare namespace NodeJS {
     readonly VERCEL_GIT_COMMIT_REF: string;
     // private
     readonly ACCOUNT_PRIVATE_KEY: string;
+    readonly ETHERSCAN_API_KEY: string;
     // public
     readonly NEXT_PUBLIC_ALCHEMY_API_KEY: string;
     readonly NEXT_PUBLIC_ALCHEMY_SEPOLIA_URL: string;
