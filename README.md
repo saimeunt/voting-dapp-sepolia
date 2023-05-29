@@ -5,9 +5,11 @@ https://sepolia.etherscan.io/address/0xeb9BC6BCaD612Fd5cAF1cA8406D746cc02E675d9
 
 ## Run in dev
 
-`pnpm hardhat:node`
-`pnpm hardhat:deploy:localhost`
-`pnpm dev`
+```
+pnpm hardhat:node
+pnpm hardhat:deploy:localhost
+pnpm dev
+```
 
 ## Deploy contract
 
