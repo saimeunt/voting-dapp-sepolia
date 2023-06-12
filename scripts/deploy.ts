@@ -1,10 +1,9 @@
 import { ethers } from 'hardhat';
 
 async function main() {
-  const factory = await ethers.getContractFactory('Voting');
-  const contract = await factory.deploy();
-  await contract.deployed();
-  console.log(`Voting successfully deployed to ${contract.address}`);
+  const contract = await ethers.deployContract('Voting');
+  await contract.waitForDeployment();
+  console.log(`Voting successfully deployed to ${contract.target}`);
 }
 
 main().catch((error) => {

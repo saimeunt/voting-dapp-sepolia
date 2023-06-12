@@ -1,40 +1,5 @@
 export const abi = [
   {
-    inputs: [],
-    name: 'DuplicateProposalError',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'InvalidProposalError',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'InvalidProposalId',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'InvalidWorkflowStatusError',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NotEnoughProposalsError',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'VoterAlreadyVotedError',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'VoterNotRegisteredError',
-    type: 'error',
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -118,8 +83,34 @@ export const abi = [
     type: 'event',
   },
   {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '_desc',
+        type: 'string',
+      },
+    ],
+    name: 'addProposal',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_addr',
+        type: 'address',
+      },
+    ],
+    name: 'addVoter',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
-    name: 'endProposalsRegistration',
+    name: 'endProposalsRegistering',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -132,8 +123,14 @@ export const abi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'getWinner',
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_id',
+        type: 'uint256',
+      },
+    ],
+    name: 'getOneProposal',
     outputs: [
       {
         components: [
@@ -157,6 +154,42 @@ export const abi = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_addr',
+        type: 'address',
+      },
+    ],
+    name: 'getVoter',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'bool',
+            name: 'isRegistered',
+            type: 'bool',
+          },
+          {
+            internalType: 'bool',
+            name: 'hasVoted',
+            type: 'bool',
+          },
+          {
+            internalType: 'uint256',
+            name: 'votedProposalId',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct Voting.Voter',
+        name: '',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'owner',
     outputs: [
@@ -170,69 +203,6 @@ export const abi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'proposals',
-    outputs: [
-      {
-        internalType: 'string',
-        name: 'description',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'voteCount',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'string',
-        name: 'description',
-        type: 'string',
-      },
-    ],
-    name: 'registerProposal',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_voter',
-        type: 'address',
-      },
-    ],
-    name: 'registerVoter',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address[]',
-        name: '_voters',
-        type: 'address[]',
-      },
-    ],
-    name: 'registerVoters',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'renounceOwnership',
     outputs: [],
@@ -240,8 +210,21 @@ export const abi = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_id',
+        type: 'uint256',
+      },
+    ],
+    name: 'setVote',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
-    name: 'startProposalsRegistration',
+    name: 'startProposalsRegistering',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -251,19 +234,6 @@ export const abi = [
     name: 'startVotingSession',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'status',
-    outputs: [
-      {
-        internalType: 'enum Voting.WorkflowStatus',
-        name: '',
-        type: 'uint8',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -287,41 +257,12 @@ export const abi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'proposalId',
-        type: 'uint256',
-      },
-    ],
-    name: 'vote',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'voters',
+    inputs: [],
+    name: 'winningProposalID',
     outputs: [
       {
-        internalType: 'bool',
-        name: 'isRegistered',
-        type: 'bool',
-      },
-      {
-        internalType: 'bool',
-        name: 'hasVoted',
-        type: 'bool',
-      },
-      {
         internalType: 'uint256',
-        name: 'votedProposalId',
+        name: '',
         type: 'uint256',
       },
     ],
@@ -330,12 +271,12 @@ export const abi = [
   },
   {
     inputs: [],
-    name: 'winningProposalId',
+    name: 'workflowStatus',
     outputs: [
       {
-        internalType: 'uint256',
+        internalType: 'enum Voting.WorkflowStatus',
         name: '',
-        type: 'uint256',
+        type: 'uint8',
       },
     ],
     stateMutability: 'view',

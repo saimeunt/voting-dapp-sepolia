@@ -11,7 +11,7 @@ const contract = getContract({
 });
 
 export const getStatus = async (): Promise<WorkflowStatus> => {
-  const rawStatus = await contract.read.status();
+  const rawStatus = await contract.read.workflowStatus();
   return rawStatus as WorkflowStatus;
 };
 
