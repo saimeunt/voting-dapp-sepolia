@@ -9,7 +9,7 @@
     "prettier": "prettier --write \"{app,components,contracts,lib}/**/*.{ts,tsx,sol}\"",
     "tsc": "tsc --noEmit",
     "dev": "next dev",
-    "prebuild": "yarn hardhat:compile",
+    "prebuild": "hardhat compile",
     "build": "next build",
     "hardhat:node": "hardhat node",
     "hardhat:compile": "hardhat compile",
