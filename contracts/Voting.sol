@@ -172,4 +172,6 @@ contract Voting is Ownable {
     workflowStatus = WorkflowStatus.VotesTallied;
     emit WorkflowStatusChange(WorkflowStatus.VotingSessionEnded, WorkflowStatus.VotesTallied);
   }
+
+  fallback() external {}
 }

@@ -1,3 +1,16 @@
+export type Voter = {
+  address: `0x${string}`;
+  isRegistered: boolean;
+  hasVoted: boolean;
+  votedProposalId: bigint;
+};
+
+export type Proposal = {
+  id: bigint;
+  description: string;
+  voteCount: bigint;
+};
+
 type ObjectValues<T> = T[keyof T];
 
 export const WorkflowStatuses = {

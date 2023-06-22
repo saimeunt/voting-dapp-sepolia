@@ -1,9 +1,17 @@
-import { getStatus } from '../../lib/contract';
-import { statusToString } from '../../lib/types';
+import { getStatus, getVoters, getProposals } from '../../lib/contract';
+import Heading from './heading';
+import VotersTable from './voters-table';
+import ProposalsTable from './proposals-table';
 
 const Index = async () => {
-  const status = await getStatus();
-  return <main className="m-4">Workflow Status: {statusToString(status)}</main>;
+  const [status, voters, proposals] = await Promise.all([getStatus(), getVoters(), getProposals()]);
+  return (
+    <main className="py-4">
+      <Heading status={status} />
+      <VotersTable voters={voters} status={status} />
+      <ProposalsTable proposals={proposals} status={status} />
+    </main>
+  );
 };
 
 export default Index;

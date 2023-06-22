@@ -4,10 +4,10 @@ import formsPlugin from '@tailwindcss/forms';
 
 const config = {
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
-  // darkMode: 'class',
   theme: {
     extend: {},
   },
+  // darkMode: 'class',
   plugins: [aspectRatioPlugin, formsPlugin],
 } satisfies Config;
 

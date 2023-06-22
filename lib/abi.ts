@@ -83,6 +83,10 @@ export const abi = [
     type: 'event',
   },
   {
+    stateMutability: 'nonpayable',
+    type: 'fallback',
+  },
+  {
     inputs: [
       {
         internalType: 'string',

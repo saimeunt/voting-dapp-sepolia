@@ -19,7 +19,6 @@ export const metadata = {
   },
 };
 
-/* @ts-expect-error Async Server Component */
 const IndexPage = () => <Index />;
 
 export default IndexPage;
