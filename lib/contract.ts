@@ -75,7 +75,8 @@ export const getProposals = async (): Promise<Proposal[]> => {
       fromBlock: BigInt(0),
     }),
   ]);
-  const account = voterRegisteredLogs[0].args.voterAddress;
+  const firstVoter = voterRegisteredLogs[0] || { args: {} };
+  const account = firstVoter.args.voterAddress;
   if (!account) {
     return [];
   }
@@ -86,18 +87,6 @@ export const getProposals = async (): Promise<Proposal[]> => {
       return { id, description, voteCount };
     }),
   );
-};
-
-export const useAddVoter = (voterAddress: `0x${string}`) => {
-  const { config } = usePrepareContractWrite({
-    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-    abi,
-    functionName: 'addVoter',
-    args: [voterAddress],
-    enabled: isAddress(voterAddress),
-  });
-  const { data, write: addVoter } = useContractWrite(config);
-  return { data, addVoter };
 };
 
 export const useStartProposalsRegistering = () => {
