@@ -21,7 +21,6 @@ const AddVoterModal = () => {
   // console.log(data?.hash);
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
-    confirmations: 3,
     onSuccess: () => {
       closeAddVoterModal();
       setVoterAddress('');

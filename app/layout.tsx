@@ -20,4 +20,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
   </html>
 );
 
+export const dynamic = 'force-dynamic';
+
 export default RootLayout;
