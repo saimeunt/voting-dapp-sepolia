@@ -3,6 +3,34 @@ pragma solidity 0.8.18;
 
 import '@openzeppelin/contracts/access/Ownable.sol';
 
+/**
+ * @dev Contract which provides a simple voting mechanism
+ * A vote follows this workflow :
+ * - Registering Voters :
+ *   the administrator is allowed to register the list of voters using the addVoter function.
+ *   Once done, the administrator can call startProposalsRegistering to go to the next step.
+ * - ProposalsRegistrationStarted :
+ *   the registered voters can submit some voting options (they can submit any number of voting
+ *   proposal) using addProposal function.
+ *   Note that the administrator is not allowed to submit voting options unless he added himself
+ *   as a registered voter.
+ *   Registered voters can get info from a proposal using getOneProposal.
+ *   Once all proposals have been submited, the administrator shall call endProposalsRegistering
+ *   to go to next step.
+ * - ProposalsRegistrationEnded :
+ *   Voters can't send proposals anymore.
+ *   Administrator can go to next state anytime he wants by using startVotingSession function.
+ * - VotingSessionStarted :
+ *   the registered voters are now allowed to submit their voting choice using setVote function.
+ *   Each voter can only submit one voting choice and will not be allowed to change his vote.
+ *   Once done, the administrator shall call endVotingSession to go to the next step.
+ * - VotingSessionEnded :
+ *   voting is not possible anymore.
+ *   Administrator can trigger the reveal of the winning proposal by calling tallyVotes function.
+ * - VotesTallied :
+ *   the result is now publicly available.
+ */
+
 contract Voting is Ownable {
   uint public winningProposalID;
 
@@ -35,6 +63,9 @@ contract Voting is Ownable {
   event ProposalRegistered(uint proposalId);
   event Voted(address voter, uint proposalId);
 
+  /**
+   * @dev Throws if called by any account that is not a voter.
+   */
   modifier onlyVoters() {
     require(voters[msg.sender].isRegistered, "You're not a voter");
     _;
@@ -44,16 +75,30 @@ contract Voting is Ownable {
 
   // ::::::::::::: GETTERS ::::::::::::: //
 
+  /**
+   * @dev     Allow voters to get vote info from any voter
+   * @param   _addr  Address of the voter
+   * @return  Voter
+   */
   function getVoter(address _addr) external view onlyVoters returns (Voter memory) {
     return voters[_addr];
   }
 
+  /**
+   * @dev     Allow voters to get info about a proposal
+   * @param   _id  Proposal ID
+   * @return  Proposal
+   */
   function getOneProposal(uint _id) external view onlyVoters returns (Proposal memory) {
     return proposalsArray[_id];
   }
 
   // ::::::::::::: REGISTRATION ::::::::::::: //
 
+  /**
+   * @dev     Register a new voter (owner only)
+   * @param   _addr  address of the voter to register
+   */
   function addVoter(address _addr) external onlyOwner {
     require(
       workflowStatus == WorkflowStatus.RegisteringVoters,
@@ -67,6 +112,10 @@ contract Voting is Ownable {
 
   // ::::::::::::: PROPOSAL ::::::::::::: //
 
+  /**
+   * @dev     Add a vote option (voters only)
+   * @param   _desc  Textual description of the proposal
+   */
   function addProposal(string calldata _desc) external onlyVoters {
     require(
       workflowStatus == WorkflowStatus.ProposalsRegistrationStarted,
@@ -86,6 +135,10 @@ contract Voting is Ownable {
 
   // ::::::::::::: VOTE ::::::::::::: //
 
+  /**
+   * @dev     Allow registered voters to vote for their favorite voting option
+   * @param   _id  ID of the voted proposal
+   */
   function setVote(uint _id) external onlyVoters {
     require(
       workflowStatus == WorkflowStatus.VotingSessionStarted,
@@ -107,6 +160,9 @@ contract Voting is Ownable {
 
   // ::::::::::::: STATE ::::::::::::: //
 
+  /**
+   * @dev End voters registration step and start proposals registration step
+   */
   function startProposalsRegistering() external onlyOwner {
     require(
       workflowStatus == WorkflowStatus.RegisteringVoters,
@@ -124,6 +180,9 @@ contract Voting is Ownable {
     );
   }
 
+  /**
+   * @dev End voters proposals registering step
+   */
   function endProposalsRegistering() external onlyOwner {
     require(
       workflowStatus == WorkflowStatus.ProposalsRegistrationStarted,
@@ -136,6 +195,9 @@ contract Voting is Ownable {
     );
   }
 
+  /**
+   * @dev Start voting session
+   */
   function startVotingSession() external onlyOwner {
     require(
       workflowStatus == WorkflowStatus.ProposalsRegistrationEnded,
@@ -148,6 +210,9 @@ contract Voting is Ownable {
     );
   }
 
+  /**
+   * @dev End voting session
+   */
   function endVotingSession() external onlyOwner {
     require(
       workflowStatus == WorkflowStatus.VotingSessionStarted,
@@ -160,6 +225,9 @@ contract Voting is Ownable {
     );
   }
 
+  /**
+   * @dev Make voting result officially available
+   */
   function tallyVotes() external onlyOwner {
     require(
       workflowStatus == WorkflowStatus.VotingSessionEnded,
