@@ -98,6 +98,10 @@ contract Voting is Ownable {
     voters[msg.sender].hasVoted = true;
     proposalsArray[_id].voteCount++;
 
+    // To prevent DOS gas limit attack, we update the winning id after each new vote
+    if (proposalsArray[_id].voteCount > proposalsArray[winningProposalID].voteCount) {
+      winningProposalID = _id;
+    }
     emit Voted(msg.sender, _id);
   }
 
@@ -161,13 +165,6 @@ contract Voting is Ownable {
       workflowStatus == WorkflowStatus.VotingSessionEnded,
       'Current status is not voting session ended'
     );
-    uint _winningProposalId;
-    for (uint256 p = 0; p < proposalsArray.length; p++) {
-      if (proposalsArray[p].voteCount > proposalsArray[_winningProposalId].voteCount) {
-        _winningProposalId = p;
-      }
-    }
-    winningProposalID = _winningProposalId;
 
     workflowStatus = WorkflowStatus.VotesTallied;
     emit WorkflowStatusChange(WorkflowStatus.VotingSessionEnded, WorkflowStatus.VotesTallied);
