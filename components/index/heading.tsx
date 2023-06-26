@@ -6,7 +6,7 @@ import { useWaitForTransaction } from 'wagmi';
 import clsx from 'clsx';
 
 import { WorkflowStatus, WorkflowStatuses, statusToString } from '../../lib/types';
-import { useStartProposalsRegistering, useEndProposalsRegistering } from '../../lib/contract';
+import { useStartProposalsRegistering, useEndProposalsRegistering, useStartVoting, useEndVoting } from '../../lib/contract';
 
 const WorkflowStatusBadge = ({ status }: { status: WorkflowStatus }) => (
   <span
@@ -84,6 +84,38 @@ const EndProposalsRegisteringButton = () => {
   );
 };
 
+const StartVotingButton = () => {
+  const router = useRouter();
+  const { data, startVoting } = useStartVoting();
+  const { isLoading } = useWaitForTransaction({
+    hash: data?.hash,
+    onSuccess: () => router.refresh(),
+  });
+  return (
+    <ChangeWorkflowStatusButton
+      text={`Start${isLoading ? 'ing' : ''} voting${isLoading ? '…' : ''}`}
+      onClick={startVoting}
+      isLoading={isLoading}
+    />
+  );
+};
+
+const EndVotingButton = () => {
+  const router = useRouter();
+  const { data, endVoting } = useEndVoting();
+  const { isLoading } = useWaitForTransaction({
+    hash: data?.hash,
+    onSuccess: () => router.refresh(),
+  });
+  return (
+    <ChangeWorkflowStatusButton
+      text={`End${isLoading ? 'ing' : ''} voting${isLoading ? '…' : ''}`}
+      onClick={endVoting}
+      isLoading={isLoading}
+    />
+  );
+};
+
 const Heading = ({ status }: { status: WorkflowStatus }) => {
   const isClient = useIsClient();
   const { isConnected } = useAccount();
@@ -100,6 +132,12 @@ const Heading = ({ status }: { status: WorkflowStatus }) => {
           {status === WorkflowStatuses.RegisteringVoters && <StartProposalsRegisteringButton />}
           {status === WorkflowStatuses.ProposalsRegistrationStarted && (
             <EndProposalsRegisteringButton />
+          )}
+          {status === WorkflowStatuses.ProposalsRegistrationEnded && (
+            <StartVotingButton />
+          )}
+          {status === WorkflowStatuses.VotingSessionStarted && (
+            <EndVotingButton />
           )}
         </div>
       )}

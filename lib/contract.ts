@@ -91,6 +91,17 @@ export const getProposals = async (): Promise<Proposal[]> => {
   );
 };
 
+export const useAddProposal = (proposal: `${string}`) => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'addProposal',
+    args: [proposal],
+  });
+  const { data, write: addProposal } = useContractWrite(config);
+  return { data, addProposal };
+};
+
 export const useAddVoter = (voterAddress: `0x${string}`) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
@@ -122,5 +133,26 @@ export const useEndProposalsRegistering = () => {
   const { data, write: endProposalsRegistering } = useContractWrite(config);
   return { data, endProposalsRegistering };
 };
+
+export const useStartVoting = () => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'startVotingSession',
+  });
+  const { data, write: startVoting } = useContractWrite(config);
+  return { data, startVoting };
+};
+
+export const useEndVoting = () => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'endVotingSession',
+  });
+  const { data, write: endVoting } = useContractWrite(config);
+  return { data, endVoting };
+};
+
 
 export default contract;
