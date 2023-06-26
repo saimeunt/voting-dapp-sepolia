@@ -89,6 +89,17 @@ export const getProposals = async (): Promise<Proposal[]> => {
   );
 };
 
+export const useAddProposal = (proposal: `${string}`) => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'addProposal',
+    args: [proposal],
+  });
+  const { data, write: addProposal } = useContractWrite(config);
+  return { data, addProposal };
+};
+
 export const useAddVoter = (voterAddress: `0x${string}`) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,

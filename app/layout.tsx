@@ -6,6 +6,7 @@ import Providers from '../components/lib/providers';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import AddVoterModal from '../components/lib/add-voter-modal';
+import AddProposalModal from '../components/lib/add-proposal-modal';
 
 const RootLayout = ({ children }: { children: ReactNode }) => (
   <html lang="en" className="h-full">
@@ -15,6 +16,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
         {children}
         <Footer />
         <AddVoterModal />
+        <AddProposalModal />
       </Providers>
     </body>
   </html>
