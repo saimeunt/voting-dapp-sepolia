@@ -13,6 +13,8 @@ const contract = getContract({
   publicClient,
 });
 
+export const getOwner = () => contract.read.owner();
+
 export const getStatus = async (): Promise<WorkflowStatus> => {
   const rawStatus = await contract.read.workflowStatus();
   return rawStatus as WorkflowStatus;

@@ -25,7 +25,7 @@ export const WorkflowStatuses = {
 export type WorkflowStatus = ObjectValues<typeof WorkflowStatuses>;
 
 export const statusToString = (status: WorkflowStatus) => {
-  const a = [
+  const statuses = [
     'RegisteringVoters',
     'ProposalsRegistrationStarted',
     'ProposalsRegistrationEnded',
@@ -33,5 +33,5 @@ export const statusToString = (status: WorkflowStatus) => {
     'VotingSessionEnded',
     'VotesTallied',
   ] as const;
-  return a[status];
+  return statuses[status];
 };

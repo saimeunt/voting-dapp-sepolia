@@ -18,7 +18,6 @@ const AddVoterModal = () => {
   const router = useRouter();
   const [voterAddress, setVoterAddress] = useState('');
   const { data, addVoter } = useAddVoter(voterAddress as `0x${string}`);
-  // console.log(data?.hash);
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
     onSuccess: () => {
