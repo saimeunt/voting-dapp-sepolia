@@ -121,4 +121,25 @@ export const useEndProposalsRegistering = () => {
   return { data, endProposalsRegistering };
 };
 
+export const useStartVoting = () => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'startVotingSession',
+  });
+  const { data, write: startVoting } = useContractWrite(config);
+  return { data, startVoting };
+};
+
+export const useEndVoting = () => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'endVotingSession',
+  });
+  const { data, write: endVoting } = useContractWrite(config);
+  return { data, endVoting };
+};
+
+
 export default contract;
