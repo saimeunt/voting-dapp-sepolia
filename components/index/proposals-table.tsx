@@ -1,20 +1,16 @@
 'use client';
-import { useIsClient } from 'usehooks-ts';
-import { useAccount } from 'wagmi';
 
 import { Proposal, WorkflowStatus, WorkflowStatuses } from '../../lib/types';
 import useContext from '../lib/context/hook';
 
 const ProposalsTable = ({
-  proposals,
   status,
+  proposals,
 }: {
-  proposals: Proposal[];
   status: WorkflowStatus;
+  proposals: Proposal[];
 }) => {
   const { openAddProposalModal } = useContext();
-  const isClient = useIsClient();
-  const { isConnected } = useAccount();
   return (
     <div className="bg-gray-900 py-10">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -26,17 +22,15 @@ const ProposalsTable = ({
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            {status === WorkflowStatuses.ProposalsRegistrationStarted &&
-              isClient &&
-              isConnected && (
-                <button
-                  type="button"
-                  className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                  onClick={openAddProposalModal}
-                >
-                  Add proposal
-                </button>
-              )}
+            {status === WorkflowStatuses.ProposalsRegistrationStarted && (
+              <button
+                type="button"
+                className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                onClick={openAddProposalModal}
+              >
+                Add proposal
+              </button>
+            )}
           </div>
         </div>
         <div className="mt-8 flow-root">

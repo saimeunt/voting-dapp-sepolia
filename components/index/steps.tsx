@@ -4,7 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useWaitForTransaction } from 'wagmi';
 
 import { WorkflowStatus, WorkflowStatuses } from '../../lib/types';
-import { useStartProposalsRegistering, useEndProposalsRegistering } from '../../lib/contract';
+import {
+  useStartProposalsRegistering,
+  useEndProposalsRegistering,
+  useStartVotingSession,
+  useEndVotingSession,
+} from '../../lib/contract';
 
 const Step = ({
   id,
@@ -67,8 +72,14 @@ const Steps = ({ status }: { status: WorkflowStatus }) => {
     useStartProposalsRegistering();
   const { data: endProposalsRegisteringData, endProposalsRegistering } =
     useEndProposalsRegistering();
+  const { data: startVotingSessionData, startVotingSession } = useStartVotingSession();
+  const { data: endVotingSessionData, endVotingSession } = useEndVotingSession();
   const { isLoading } = useWaitForTransaction({
-    hash: startProposalsRegisteringData?.hash || endProposalsRegisteringData?.hash,
+    hash:
+      startProposalsRegisteringData?.hash ||
+      endProposalsRegisteringData?.hash ||
+      startVotingSessionData?.hash ||
+      endVotingSessionData?.hash,
     onSuccess: () => router.refresh(),
   });
   const steps = [
@@ -83,18 +94,18 @@ const Steps = ({ status }: { status: WorkflowStatus }) => {
     },
     {
       id: WorkflowStatuses.ProposalsRegistrationEnded,
-      name: 'End proposals registering',
+      name: `End${isLoading ? 'ing' : ''} proposals registering${isLoading ? '…' : ''}`,
       onClick: endProposalsRegistering,
     },
     {
       id: WorkflowStatuses.VotingSessionStarted,
-      name: 'Start voting session',
-      onClick: startProposalsRegistering,
+      name: `Start${isLoading ? 'ing' : ''} voting session${isLoading ? '…' : ''}`,
+      onClick: startVotingSession,
     },
     {
       id: WorkflowStatuses.VotingSessionEnded,
-      name: 'End voting session',
-      onClick: endProposalsRegistering,
+      name: `End${isLoading ? 'ing' : ''} voting session${isLoading ? '…' : ''}`,
+      onClick: endVotingSession,
     },
   ];
   const getType = (id: WorkflowStatus) => {

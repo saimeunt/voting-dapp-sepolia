@@ -91,17 +91,6 @@ export const getProposals = async (): Promise<Proposal[]> => {
   );
 };
 
-export const useAddProposal = (proposal: `${string}`) => {
-  const { config } = usePrepareContractWrite({
-    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-    abi,
-    functionName: 'addProposal',
-    args: [proposal],
-  });
-  const { data, write: addProposal } = useContractWrite(config);
-  return { data, addProposal };
-};
-
 export const useAddVoter = (voterAddress: `0x${string}`) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
@@ -112,6 +101,17 @@ export const useAddVoter = (voterAddress: `0x${string}`) => {
   });
   const { data, write: addVoter } = useContractWrite(config);
   return { data, addVoter };
+};
+
+export const useAddProposal = (proposal: string) => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'addProposal',
+    args: [proposal],
+  });
+  const { data, write: addProposal } = useContractWrite(config);
+  return { data, addProposal };
 };
 
 export const useStartProposalsRegistering = () => {
@@ -134,25 +134,24 @@ export const useEndProposalsRegistering = () => {
   return { data, endProposalsRegistering };
 };
 
-export const useStartVoting = () => {
+export const useStartVotingSession = () => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'startVotingSession',
   });
-  const { data, write: startVoting } = useContractWrite(config);
-  return { data, startVoting };
+  const { data, write: startVotingSession } = useContractWrite(config);
+  return { data, startVotingSession };
 };
 
-export const useEndVoting = () => {
+export const useEndVotingSession = () => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'endVotingSession',
   });
-  const { data, write: endVoting } = useContractWrite(config);
-  return { data, endVoting };
+  const { data, write: endVotingSession } = useContractWrite(config);
+  return { data, endVotingSession };
 };
-
 
 export default contract;

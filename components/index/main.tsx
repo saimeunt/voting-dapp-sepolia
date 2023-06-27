@@ -2,11 +2,12 @@
 import { useIsClient } from 'usehooks-ts';
 import { useAccount } from 'wagmi';
 
+import EmptyState from './empty-state';
+import Heading from './heading';
 import Steps from './steps';
-// import Heading from './heading';
 import VotersTable from './voters-table';
 import ProposalsTable from './proposals-table';
-import { WorkflowStatus, Voter, Proposal } from '../../lib/types';
+import { WorkflowStatus, Voter, Proposal, WorkflowStatuses } from '../../lib/types';
 
 const Main = ({
   owner,
@@ -23,17 +24,27 @@ const Main = ({
   const { address } = useAccount();
   const isOwner = address === owner;
   const isVoter = voters.find((voter) => voter.address === address) !== undefined;
+  const showEmptyState = !address || (!isOwner && !isVoter);
+  const showHeading = isOwner || isVoter;
+  const showProposals =
+    isVoter &&
+    (status === WorkflowStatuses.ProposalsRegistrationStarted ||
+      status === WorkflowStatuses.ProposalsRegistrationEnded ||
+      status === WorkflowStatuses.VotingSessionStarted);
   return (
-    <main className="py-4">
-      {/* <Heading status={status} /> */}
-      {isClient && isOwner && (
-        <>
-          <Steps status={status} />
-          <VotersTable voters={voters} status={status} />
-        </>
-      )}
-      {isClient && isVoter && <ProposalsTable proposals={proposals} status={status} />}
-    </main>
+    isClient && (
+      <main className="py-4">
+        {showEmptyState && <EmptyState address={address} />}
+        {showHeading && <Heading address={address} isOwner={isOwner} />}
+        {isOwner && (
+          <>
+            <Steps status={status} />
+            <VotersTable status={status} voters={voters} proposals={proposals} />
+          </>
+        )}
+        {showProposals && <ProposalsTable status={status} proposals={proposals} />}
+      </main>
+    )
   );
 };
 
