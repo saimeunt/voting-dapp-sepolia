@@ -12,16 +12,22 @@ const AddProposalModal = () => {
   const {
     state: { addProposalModalOpen },
     closeAddProposalModal,
+    openNotification,
   } = useContext();
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const [proposal, setProposal] = useState('');
-  const { data, addProposal } = useAddProposal(proposal);
+  const { data, addProposal } = useAddProposal(proposal, () => {
+    closeAddProposalModal();
+    setProposal('');
+    openNotification(false);
+  });
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
     onSuccess: () => {
       closeAddProposalModal();
       setProposal('');
+      openNotification(true);
       router.refresh();
     },
   });

@@ -13,16 +13,22 @@ const AddVoterModal = () => {
   const {
     state: { addVoterModalOpen },
     closeAddVoterModal,
+    openNotification,
   } = useContext();
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const [voterAddress, setVoterAddress] = useState('');
-  const { data, addVoter } = useAddVoter(voterAddress as `0x${string}`);
+  const { data, addVoter } = useAddVoter(voterAddress as `0x${string}`, () => {
+    closeAddVoterModal();
+    setVoterAddress('');
+    openNotification(false);
+  });
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
     onSuccess: () => {
       closeAddVoterModal();
       setVoterAddress('');
+      openNotification(true);
       router.refresh();
     },
   });

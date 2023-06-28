@@ -93,26 +93,35 @@ export const getProposals = async (): Promise<Proposal[]> => {
 
 export const getWinningProposalId = () => contract.read.winningProposalID();
 
-export const useAddVoter = (voterAddress: `0x${string}`) => {
-  const { config } = usePrepareContractWrite({
+export const useAddVoter = (voterAddress: `0x${string}`, onError: () => void) => {
+  const { config, isError: isPrepareError } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'addVoter',
     args: [voterAddress],
     enabled: isAddress(voterAddress),
+    onError,
   });
-  const { data, write: addVoter } = useContractWrite(config);
-  return { data, addVoter };
+  const {
+    data,
+    write: addVoter,
+    isError,
+  } = useContractWrite({
+    ...config,
+    onError,
+  });
+  return { data, addVoter, isPrepareError, isError };
 };
 
-export const useAddProposal = (proposal: string) => {
+export const useAddProposal = (proposal: string, onError: () => void) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'addProposal',
     args: [proposal],
+    onError,
   });
-  const { data, write: addProposal } = useContractWrite(config);
+  const { data, write: addProposal } = useContractWrite({ ...config, onError });
   return { data, addProposal };
 };
 
