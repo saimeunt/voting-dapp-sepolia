@@ -12,7 +12,7 @@ const ProposalsTable = ({
   proposals: Proposal[];
   voter?: Voter;
 }) => {
-  const { openAddProposalModal } = useContext();
+  const { openAddProposalModal, openConfirmVoteModal } = useContext();
   return (
     <div className="bg-gray-900 py-10">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -78,7 +78,7 @@ const ProposalsTable = ({
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                               <button
                                 className="text-indigo-400 hover:text-indigo-300"
-                                // onClick={setVote}
+                                onClick={() => {openConfirmVoteModal(proposal.id)}}
                               >
                                 Vote<span className="sr-only">on {proposal.description}</span>
                               </button>

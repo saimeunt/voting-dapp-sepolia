@@ -8,12 +8,16 @@ const Hook = () => {
   const closeAddVoterModal = () => dispatch({ type: 'CLOSE_ADD_VOTER_MODAL' });
   const openAddProposalModal = () => dispatch({ type: 'OPEN_ADD_PROPOSAL_MODAL' });
   const closeAddProposalModal = () => dispatch({ type: 'CLOSE_ADD_PROPOSAL_MODAL' });
+  const openConfirmVoteModal = (voteId: bigint) => dispatch({ type: 'OPEN_CONFIRM_VOTE_MODAL', voteId: voteId});
+  const closeConfirmVoteModal = () => dispatch({ type: 'CLOSE_CONFIRM_VOTE_MODAL' });
   return {
     state,
     openAddVoterModal,
     closeAddVoterModal,
     openAddProposalModal,
     closeAddProposalModal,
+    openConfirmVoteModal,
+    closeConfirmVoteModal,
   };
 };
 
