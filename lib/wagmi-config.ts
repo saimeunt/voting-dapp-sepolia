@@ -2,7 +2,6 @@ import { createConfig, configureChains } from 'wagmi';
 import { hardhat, sepolia } from 'wagmi/chains';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-// import { w3mConnectors } from '@web3modal/ethereum';
 import { getDefaultWallets } from '@rainbow-me/rainbowkit';
 
 const developmentChains = [hardhat];
@@ -10,11 +9,6 @@ const productionChains = [sepolia];
 
 export const chains = process.env.NODE_ENV !== 'production' ? developmentChains : productionChains;
 
-/* const connectors = w3mConnectors({
-  projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
-  version: 2,
-  chains,
-}); */
 const { connectors } = getDefaultWallets({
   appName: 'Voting dApp',
   projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,

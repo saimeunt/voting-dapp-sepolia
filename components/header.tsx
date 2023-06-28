@@ -5,15 +5,12 @@ import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 import { useIsClient } from 'usehooks-ts';
-// import { useAccount } from 'wagmi';
 import clsx from 'clsx';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-// import { Web3Button } from '@web3modal/react';
 
 const Header = () => {
   const pathname = usePathname();
   const isClient = useIsClient();
-  // const { isConnected } = useAccount();
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (

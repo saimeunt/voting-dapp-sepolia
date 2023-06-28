@@ -1,5 +1,4 @@
 'use client';
-
 import { Voter, Proposal, WorkflowStatus, WorkflowStatuses } from '../../lib/types';
 import useContext from '../lib/context/hook';
 
