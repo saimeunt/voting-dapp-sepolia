@@ -26,7 +26,7 @@ const developmentWagmiConfig = () => {
     jsonRpcProvider({ rpc: () => ({ http: hardhat.rpcUrls.default.http[0] }) }),
   ]);
   return createConfig({
-    autoConnect: false,
+    autoConnect: true,
     connectors,
     publicClient,
   });
