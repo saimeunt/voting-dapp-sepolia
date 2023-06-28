@@ -10,6 +10,7 @@
     "tsc": "tsc --noEmit",
     "dev": "next dev",
     "build": "pnpm hardhat:compile && next build",
+    "start": "next start",
     "hardhat:node": "hardhat node",
     "hardhat:compile": "hardhat compile",
     "hardhat:deploy:localhost": "hardhat run scripts/deploy.ts --network localhost",

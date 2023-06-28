@@ -78,9 +78,9 @@ const ProposalsTable = ({
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                               <button
                                 className="text-indigo-400 hover:text-indigo-300"
-                                onClick={() => {openConfirmVoteModal(proposal.id)}}
+                                onClick={() => openConfirmVoteModal(proposal)}
                               >
-                                Vote<span className="sr-only">on {proposal.description}</span>
+                                Vote<span className="sr-only">for {proposal.description}</span>
                               </button>
                             </td>
                           )}

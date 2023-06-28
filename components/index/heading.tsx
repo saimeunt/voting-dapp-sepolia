@@ -34,7 +34,7 @@ const Heading = ({
       <RoleBadge isOwner={isOwner} />
       {votedProposal && (
         <span className="text-lg text-gray-400">
-          voted on <span className="font-semibold text-white">{votedProposal.description}</span>
+          voted for <span className="font-semibold text-white">{votedProposal.description}</span>
         </span>
       )}
     </div>

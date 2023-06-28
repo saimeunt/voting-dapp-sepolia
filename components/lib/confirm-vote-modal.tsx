@@ -1,6 +1,7 @@
 'use client';
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { CheckIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { useWaitForTransaction } from 'wagmi';
 import clsx from 'clsx';
@@ -8,15 +9,26 @@ import clsx from 'clsx';
 import useContext from './context/hook';
 import { useSetVote } from '../../lib/contract';
 
-const ConfirmVoteModal = ({ voteId }: { voteId: bigint }) => {
+const ConfirmVoteModal = () => {
   const {
-    state: { confirmVoteModalOpen },
+    state: { confirmVoteModalOpen, votedProposal },
     closeConfirmVoteModal,
+    openNotification,
   } = useContext();
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
-  const [voterAddress, setVoterAddress] = useState('');
-  const { data, setVote } = useSetVote(voteId as bigint);
+  const { data, setVote } = useSetVote(votedProposal.id, () => {
+    closeConfirmVoteModal();
+    openNotification(false);
+  });
+  const { isLoading } = useWaitForTransaction({
+    hash: data?.hash,
+    onSuccess: () => {
+      closeConfirmVoteModal();
+      openNotification(true);
+      router.refresh();
+    },
+  });
   return (
     <Transition.Root show={confirmVoteModalOpen} as={Fragment}>
       <Dialog
@@ -49,26 +61,34 @@ const ConfirmVoteModal = ({ voteId }: { voteId: bigint }) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-gray-900 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div>
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10">
+                    <CheckIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+                  </div>
                   <div className="my-3 text-center sm:mt-5">
                     <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-white">
-                      Confirm vote
+                      Confirm your vote
                     </Dialog.Title>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-400">Vote ID: {voteId.toString()}</p>
+                      <p className="text-sm text-gray-400">
+                        You&apos;re about to vote for{' '}
+                        <span className="font-semibold text-white">
+                          {votedProposal.description}
+                        </span>
+                      </p>
                     </div>
                   </div>
                 </div>
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
-                    type="submit"
-                    form="create-escrow-form"
+                    disabled={isLoading}
                     className={clsx(
                       {
-                        'bg-indigo-500': true,
+                        'bg-indigo-300': isLoading,
+                        'bg-indigo-500': !isLoading,
                       },
                       'inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2',
                     )}
-                    onClick={() => {console.log("voteId = "+voteId);setVote;}}
+                    onClick={setVote}
                   >
                     Confirm
                   </button>

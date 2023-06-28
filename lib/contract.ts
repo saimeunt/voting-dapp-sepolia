@@ -100,7 +100,7 @@ export const useAddVoter = (voterAddress: `0x${string}`, onError: () => void) =>
     functionName: 'addVoter',
     args: [voterAddress],
     enabled: isAddress(voterAddress),
-    onError,
+    // onError,
   });
   const {
     data,
@@ -113,27 +113,28 @@ export const useAddVoter = (voterAddress: `0x${string}`, onError: () => void) =>
   return { data, addVoter, isPrepareError, isError };
 };
 
-export const useSetVote = (votedProposalId: bigint) => {
-  const { config } = usePrepareContractWrite({
-    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-    abi,
-    functionName: 'setVote',
-    args: [votedProposalId],
-  });
-  const { data, write: setVote } = useContractWrite(config);
-  return { data, setVote };
-};
-
 export const useAddProposal = (proposal: string, onError: () => void) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'addProposal',
     args: [proposal],
-    onError,
+    // onError,
   });
   const { data, write: addProposal } = useContractWrite({ ...config, onError });
   return { data, addProposal };
+};
+
+export const useSetVote = (votedProposalId: bigint, onError: () => void) => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'setVote',
+    args: [votedProposalId],
+    // onError,
+  });
+  const { data, write: setVote } = useContractWrite({ ...config, onError });
+  return { data, setVote };
 };
 
 export const useStartProposalsRegistering = () => {
