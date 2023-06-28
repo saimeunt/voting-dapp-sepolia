@@ -71,11 +71,6 @@ describe('Voting', () => {
     await Promise.all([contract.connect(signer2).setVote(1), contract.connect(signer3).setVote(1)]);
     return { contract, signer1, signer2, signer3 };
   };
-  const tallyVotesFixture = async () => {
-    const { contract, signer1, signer2, signer3 } = await loadFixture(endVotingSessionFixture);
-    await contract.endVotingSession();
-    return { contract, signer1, signer2, signer3 };
-  };
   // tests are grouped by functions and each function is unit tested to reach 100% coverage
   describe('addVoter', () => {
     it('should revert if not called by owner', async () => {
@@ -378,23 +373,9 @@ describe('Voting', () => {
         .to.emit(contract, 'WorkflowStatusChange')
         .withArgs(WorkflowStatus.VotingSessionStarted, WorkflowStatus.VotingSessionEnded);
     });
-  });
-  describe('tallyVotes', () => {
-    it('should revert if not called by owner', async () => {
-      const { contract, signer2 } = await loadFixture(tallyVotesFixture);
-      await expect(contract.connect(signer2).tallyVotes()).to.be.revertedWith(
-        'Ownable: caller is not the owner',
-      );
-    });
-    it('should revert if status is not VotingSessionEnded', async () => {
-      const { contract } = await loadFixture(deployContractAndSetVariablesFixture);
-      await expect(contract.tallyVotes()).to.be.revertedWith(
-        'Current status is not voting session ended',
-      );
-    });
     it('should compute the winning proposal (1)', async () => {
-      const { contract } = await loadFixture(tallyVotesFixture);
-      await contract.tallyVotes();
+      const { contract } = await loadFixture(endVotingSessionFixture);
+      await contract.endVotingSession();
       const winningProposalID = await contract.winningProposalID();
       expect(winningProposalID).to.equal(1);
     });
@@ -405,14 +386,12 @@ describe('Voting', () => {
         contract.connect(signer3).setVote(2),
       ]);
       await contract.endVotingSession();
-      await contract.tallyVotes();
       const winningProposalID = await contract.winningProposalID();
       expect(winningProposalID).to.equal(2);
     });
     it('should designate the genesis proposal as winner if no votes are registered', async () => {
       const { contract } = await loadFixture(voteFixture);
       await contract.endVotingSession();
-      await contract.tallyVotes();
       const winningProposalID = await contract.winningProposalID();
       expect(winningProposalID).to.equal(0);
     });
@@ -421,21 +400,8 @@ describe('Voting', () => {
       await contract.connect(signer2).setVote(1);
       await contract.connect(signer3).setVote(2);
       await contract.endVotingSession();
-      await contract.tallyVotes();
       const winningProposalID = await contract.winningProposalID();
       expect(winningProposalID).to.equal(1);
-    });
-    it('should change status to VotesTallied', async () => {
-      const { contract } = await loadFixture(tallyVotesFixture);
-      await contract.tallyVotes();
-      const workflowStatus = await contract.workflowStatus();
-      expect(workflowStatus).to.equal(WorkflowStatus.VotesTallied);
-    });
-    it('should emit WorkflowStatusChange', async () => {
-      const { contract } = await loadFixture(tallyVotesFixture);
-      await expect(contract.tallyVotes())
-        .to.emit(contract, 'WorkflowStatusChange')
-        .withArgs(WorkflowStatus.VotingSessionEnded, WorkflowStatus.VotesTallied);
     });
   });
 });

@@ -25,10 +25,7 @@ import '@openzeppelin/contracts/access/Ownable.sol';
  *   Each voter can only submit one voting choice and will not be allowed to change his vote.
  *   Once done, the administrator shall call endVotingSession to go to the next step.
  * - VotingSessionEnded :
- *   voting is not possible anymore.
- *   Administrator can trigger the reveal of the winning proposal by calling tallyVotes function.
- * - VotesTallied :
- *   the result is now publicly available.
+ *   voting is not possible anymore and the result is now final.
  */
 
 contract Voting is Ownable {
@@ -50,8 +47,7 @@ contract Voting is Ownable {
     ProposalsRegistrationStarted,
     ProposalsRegistrationEnded,
     VotingSessionStarted,
-    VotingSessionEnded,
-    VotesTallied
+    VotingSessionEnded
   }
 
   WorkflowStatus public workflowStatus;
@@ -223,19 +219,6 @@ contract Voting is Ownable {
       WorkflowStatus.VotingSessionStarted,
       WorkflowStatus.VotingSessionEnded
     );
-  }
-
-  /**
-   * @dev Make voting result officially available
-   */
-  function tallyVotes() external onlyOwner {
-    require(
-      workflowStatus == WorkflowStatus.VotingSessionEnded,
-      'Current status is not voting session ended'
-    );
-
-    workflowStatus = WorkflowStatus.VotesTallied;
-    emit WorkflowStatusChange(WorkflowStatus.VotingSessionEnded, WorkflowStatus.VotesTallied);
   }
 
   fallback() external {}
