@@ -54,9 +54,24 @@ contract Voting is Ownable {
   Proposal[] proposalsArray;
   mapping(address => Voter) voters;
 
+  /**
+   * @dev Emitted when `voterAddress` is registered as a voter.
+   */
   event VoterRegistered(address voterAddress);
+
+  /**
+   * @dev Emitted when workflow status changes from `previousStatus` to `newStatus`.
+   */
   event WorkflowStatusChange(WorkflowStatus previousStatus, WorkflowStatus newStatus);
+
+  /**
+   * @dev Emitted when a new proposal with identifier `proposalId` is registered by a voter.
+   */
   event ProposalRegistered(uint proposalId);
+
+  /**
+   * @dev Emitted when `voter` voted for proposal with identifier `proposalId`.
+   */
   event Voted(address voter, uint proposalId);
 
   /**
