@@ -113,6 +113,17 @@ export const useAddVoter = (voterAddress: `0x${string}`, onError: () => void) =>
   return { data, addVoter, isPrepareError, isError };
 };
 
+export const useSetVote = (votedProposalId: bigint) => {
+  const { config } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    abi,
+    functionName: 'setVote',
+    args: [votedProposalId],
+  });
+  const { data, write: setVote } = useContractWrite(config);
+  return { data, setVote };
+};
+
 export const useAddProposal = (proposal: string, onError: () => void) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,

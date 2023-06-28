@@ -13,6 +13,9 @@ const Hook = () => {
     setTimeout(() => dispatch({ type: 'CLOSE_NOTIFICATION' }), 5 * 1000);
   };
   const closeNotification = (): void => dispatch({ type: 'CLOSE_NOTIFICATION' });
+  const openConfirmVoteModal = (votedProposalId: bigint) =>
+    dispatch({ type: 'OPEN_CONFIRM_VOTE_MODAL', payload: { votedProposalId } });
+  const closeConfirmVoteModal = () => dispatch({ type: 'CLOSE_CONFIRM_VOTE_MODAL' });
   return {
     state,
     openAddVoterModal,
@@ -21,6 +24,8 @@ const Hook = () => {
     closeAddProposalModal,
     openNotification,
     closeNotification,
+    openConfirmVoteModal,
+    closeConfirmVoteModal,
   };
 };
 
