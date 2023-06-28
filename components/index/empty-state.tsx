@@ -2,7 +2,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { EnvelopeOpenIcon } from '@heroicons/react/24/outline';
 
 const EmptyState = ({ address }: { address?: `0x${string}` }) => (
-  <div className="text-center">
+  <div className="py-4 text-center">
     <EnvelopeOpenIcon className="mx-auto mt-4 h-12 w-12 text-gray-400" aria-hidden="true" />
     <h3 className="mt-2 text-sm font-semibold text-gray-400">
       {address ? 'Guest' : 'Not connected'}

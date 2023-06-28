@@ -7,7 +7,6 @@ import clsx from 'clsx';
 
 import useContext from './context/hook';
 import { useAddProposal } from '../../lib/contract';
-import { ZeroAddress } from '../../lib/utils';
 
 const AddProposalModal = () => {
   const {
@@ -17,8 +16,7 @@ const AddProposalModal = () => {
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const [proposal, setProposal] = useState('');
-  const { data, addProposal } = useAddProposal(proposal as `${string}`);
-  // console.log(data?.hash);
+  const { data, addProposal } = useAddProposal(proposal);
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
     onSuccess: () => {
@@ -69,7 +67,7 @@ const AddProposalModal = () => {
                   </div>
                 </div>
                 <form
-                  id="create-escrow-form"
+                  id="add-proposal-form"
                   className="space-y-6"
                   onSubmit={(event) => {
                     event.preventDefault();
@@ -98,7 +96,7 @@ const AddProposalModal = () => {
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
                     type="submit"
-                    form="create-escrow-form"
+                    form="add-proposal-form"
                     disabled={isLoading}
                     className={clsx(
                       {

@@ -91,6 +91,8 @@ export const getProposals = async (): Promise<Proposal[]> => {
   );
 };
 
+export const getWinningProposalId = () => contract.read.winningProposalID();
+
 export const useAddVoter = (voterAddress: `0x${string}`) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,

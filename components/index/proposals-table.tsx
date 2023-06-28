@@ -1,14 +1,16 @@
 'use client';
 
-import { Proposal, WorkflowStatus, WorkflowStatuses } from '../../lib/types';
+import { Voter, Proposal, WorkflowStatus, WorkflowStatuses } from '../../lib/types';
 import useContext from '../lib/context/hook';
 
 const ProposalsTable = ({
   status,
   proposals,
+  voter,
 }: {
   status: WorkflowStatus;
   proposals: Proposal[];
+  voter?: Voter;
 }) => {
   const { openAddProposalModal } = useContext();
   return (
@@ -22,7 +24,7 @@ const ProposalsTable = ({
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            {status === WorkflowStatuses.ProposalsRegistrationStarted && (
+            {status === WorkflowStatuses.ProposalsRegistrationStarted && voter && (
               <button
                 type="button"
                 className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
@@ -52,11 +54,13 @@ const ProposalsTable = ({
                       >
                         Vote count
                       </th>
-                      {status === WorkflowStatuses.VotingSessionStarted && (
-                        <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                          <span className="sr-only">Vote</span>
-                        </th>
-                      )}
+                      {status === WorkflowStatuses.VotingSessionStarted &&
+                        voter &&
+                        voter.votedProposalId === BigInt(0) && (
+                          <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                            <span className="sr-only">Vote</span>
+                          </th>
+                        )}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-800">
@@ -68,16 +72,18 @@ const ProposalsTable = ({
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
                           {proposal.voteCount.toString()}
                         </td>
-                        {status === WorkflowStatuses.VotingSessionStarted && (
-                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <button
-                              className="text-indigo-400 hover:text-indigo-300"
-                              // onClick={setVote}
-                            >
-                              Vote<span className="sr-only">on {proposal.description}</span>
-                            </button>
-                          </td>
-                        )}
+                        {status === WorkflowStatuses.VotingSessionStarted &&
+                          voter &&
+                          voter.votedProposalId === BigInt(0) && (
+                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                              <button
+                                className="text-indigo-400 hover:text-indigo-300"
+                                // onClick={setVote}
+                              >
+                                Vote<span className="sr-only">on {proposal.description}</span>
+                              </button>
+                            </td>
+                          )}
                       </tr>
                     ))}
                   </tbody>

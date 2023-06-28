@@ -68,7 +68,7 @@ const AddVoterModal = () => {
                   </div>
                 </div>
                 <form
-                  id="create-escrow-form"
+                  id="add-voter-form"
                   className="space-y-6"
                   onSubmit={(event) => {
                     event.preventDefault();
@@ -98,7 +98,7 @@ const AddVoterModal = () => {
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
                     type="submit"
-                    form="create-escrow-form"
+                    form="add-voter-form"
                     disabled={isLoading}
                     className={clsx(
                       {

@@ -37,7 +37,6 @@ const productionWagmiConfig = () => {
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
   ]);
   return createConfig({
-    autoConnect: false,
     connectors,
     publicClient,
   });

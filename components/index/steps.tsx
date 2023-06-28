@@ -66,7 +66,7 @@ const Step = ({
   </a>
 );
 
-const Steps = ({ status }: { status: WorkflowStatus }) => {
+const Steps = ({ status, isOwner }: { status: WorkflowStatus; isOwner: boolean }) => {
   const router = useRouter();
   const { data: startProposalsRegisteringData, startProposalsRegistering } =
     useStartProposalsRegistering();
@@ -109,11 +109,11 @@ const Steps = ({ status }: { status: WorkflowStatus }) => {
     },
   ];
   const getType = (id: WorkflowStatus) => {
-    if (id < status) {
+    if (id < status || status === WorkflowStatuses.VotingSessionEnded) {
       return 'complete';
     } else if (id === status) {
       return 'current';
-    } else if (id === status + 1) {
+    } else if (id === status + 1 && isOwner) {
       return 'next';
     } else {
       return 'upcoming';
@@ -123,13 +123,13 @@ const Steps = ({ status }: { status: WorkflowStatus }) => {
     <nav aria-label="Progress" className="px-4 sm:px-6 lg:px-8">
       <ol
         role="list"
-        className="divide-y divide-gray-300 rounded-md border border-gray-300 md:flex md:divide-y-0"
+        className="divide-y divide-gray-300 rounded-md border border-gray-300 lg:flex lg:divide-y-0"
       >
         {steps.map((step) => (
-          <li key={step.id} className="relative md:flex md:flex-1">
+          <li key={step.id} className="mg:flex relative lg:flex-1">
             <Step id={step.id} name={step.name} type={getType(step.id)} onClick={step.onClick} />
             {step.id !== WorkflowStatuses.VotingSessionEnded && (
-              <div className="absolute right-0 top-0 hidden h-full w-5 md:block" aria-hidden="true">
+              <div className="absolute right-0 top-0 hidden h-full w-5 lg:block" aria-hidden="true">
                 <svg
                   className="h-full w-full text-gray-300"
                   viewBox="0 0 22 80"
