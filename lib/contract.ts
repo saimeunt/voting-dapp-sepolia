@@ -137,43 +137,43 @@ export const useSetVote = (votedProposalId: bigint, onError: () => void) => {
   return { data, setVote };
 };
 
-export const useStartProposalsRegistering = () => {
+export const useStartProposalsRegistering = (onError: () => void) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'startProposalsRegistering',
   });
-  const { data, write: startProposalsRegistering } = useContractWrite(config);
+  const { data, write: startProposalsRegistering } = useContractWrite({ ...config, onError });
   return { data, startProposalsRegistering };
 };
 
-export const useEndProposalsRegistering = () => {
+export const useEndProposalsRegistering = (onError: () => void) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'endProposalsRegistering',
   });
-  const { data, write: endProposalsRegistering } = useContractWrite(config);
+  const { data, write: endProposalsRegistering } = useContractWrite({ ...config, onError });
   return { data, endProposalsRegistering };
 };
 
-export const useStartVotingSession = () => {
+export const useStartVotingSession = (onError: () => void) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'startVotingSession',
   });
-  const { data, write: startVotingSession } = useContractWrite(config);
+  const { data, write: startVotingSession } = useContractWrite({ ...config, onError });
   return { data, startVotingSession };
 };
 
-export const useEndVotingSession = () => {
+export const useEndVotingSession = (onError: () => void) => {
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     abi,
     functionName: 'endVotingSession',
   });
-  const { data, write: endVotingSession } = useContractWrite(config);
+  const { data, write: endVotingSession } = useContractWrite({ ...config, onError });
   return { data, endVotingSession };
 };
 

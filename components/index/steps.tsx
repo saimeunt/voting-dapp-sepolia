@@ -10,6 +10,7 @@ import {
   useStartVotingSession,
   useEndVotingSession,
 } from '../../lib/contract';
+import useContext from '../lib/context/hook';
 
 const Step = ({
   id,
@@ -68,12 +69,14 @@ const Step = ({
 
 const Steps = ({ status, isOwner }: { status: WorkflowStatus; isOwner: boolean }) => {
   const router = useRouter();
+  const { openNotification } = useContext();
+  const onError = () => openNotification(false);
   const { data: startProposalsRegisteringData, startProposalsRegistering } =
-    useStartProposalsRegistering();
+    useStartProposalsRegistering(onError);
   const { data: endProposalsRegisteringData, endProposalsRegistering } =
-    useEndProposalsRegistering();
-  const { data: startVotingSessionData, startVotingSession } = useStartVotingSession();
-  const { data: endVotingSessionData, endVotingSession } = useEndVotingSession();
+    useEndProposalsRegistering(onError);
+  const { data: startVotingSessionData, startVotingSession } = useStartVotingSession(onError);
+  const { data: endVotingSessionData, endVotingSession } = useEndVotingSession(onError);
   const { isLoading } = useWaitForTransaction({
     hash:
       startProposalsRegisteringData?.hash ||
