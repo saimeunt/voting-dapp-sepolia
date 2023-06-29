@@ -234,7 +234,7 @@ describe('Voting', () => {
     });
     it('should revert when trying to access an invalid proposal', async () => {
       const { contract, signer2 } = await loadFixture(endProposalsRegisteringFixture);
-      await expect(contract.connect(signer2).getOneProposal(3)).to.revertedWithPanic(50);
+      await expect(contract.connect(signer2).getOneProposal(3)).to.revertedWith("Proposal not found");
     });
     it('should return a proposal', async () => {
       const { contract, signer2 } = await loadFixture(endProposalsRegisteringFixture);
