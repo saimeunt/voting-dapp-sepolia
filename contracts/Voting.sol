@@ -143,7 +143,8 @@ contract Voting is Ownable {
 
     Proposal memory proposal;
     proposal.description = _desc;
-    proposalsMapping[latestProposalId++] = proposal;
+    proposalsMapping[latestProposalId] = proposal;
+    unchecked{++latestProposalId;}
     emit ProposalRegistered(latestProposalId - 1);
   }
 
