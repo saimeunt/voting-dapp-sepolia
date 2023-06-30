@@ -32,14 +32,14 @@ const Header = () => {
                   <Image
                     className="block h-8 w-auto lg:hidden"
                     src="/icon.svg"
-                    alt="Escrow dApp logo"
+                    alt="Voting dApp logo"
                     width={128}
                     height={128}
                   />
                   <Image
                     className="hidden h-8 w-auto lg:block"
                     src="/icon.svg"
-                    alt="Escrow dApp logo"
+                    alt="Voting dApp logo"
                     width={128}
                     height={128}
                   />

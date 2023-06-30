@@ -3,9 +3,8 @@ import { getContract, isAddress } from 'viem';
 
 import { abi } from './abi';
 import publicClient from './public-client';
-import { WorkflowStatus } from './types';
+import { WorkflowStatus, Voter, Proposal } from './types';
 import { ZeroAddress } from './utils';
-import { Voter, Proposal } from './types';
 
 const contract = getContract({
   address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
