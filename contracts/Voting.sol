@@ -32,9 +32,9 @@ contract Voting is Ownable {
   uint public winningProposalID;
 
   struct Voter {
+    uint votedProposalId;
     bool isRegistered;
     bool hasVoted;
-    uint votedProposalId;
   }
 
   struct Proposal {
@@ -50,8 +50,10 @@ contract Voting is Ownable {
     VotingSessionEnded
   }
 
+  uint latestProposalId;
   WorkflowStatus public workflowStatus;
-  Proposal[] proposalsArray;
+
+  mapping (uint => Proposal) proposalsMapping;
   mapping(address => Voter) voters;
 
   /**
@@ -101,7 +103,8 @@ contract Voting is Ownable {
    * @return  Proposal
    */
   function getOneProposal(uint _id) external view onlyVoters returns (Proposal memory) {
-    return proposalsArray[_id];
+    require(_id < latestProposalId, 'Proposal not found');
+    return proposalsMapping[_id];
   }
 
   // ::::::::::::: REGISTRATION ::::::::::::: //
@@ -140,8 +143,9 @@ contract Voting is Ownable {
 
     Proposal memory proposal;
     proposal.description = _desc;
-    proposalsArray.push(proposal);
-    emit ProposalRegistered(proposalsArray.length - 1);
+    proposalsMapping[latestProposalId] = proposal;
+    unchecked{++latestProposalId;}
+    emit ProposalRegistered(latestProposalId - 1);
   }
 
   // ::::::::::::: VOTE ::::::::::::: //
@@ -156,14 +160,13 @@ contract Voting is Ownable {
       'Voting session havent started yet'
     );
     require(voters[msg.sender].hasVoted != true, 'You have already voted');
-    require(_id < proposalsArray.length, 'Proposal not found'); // pas obligé, et pas besoin du >0 car uint
+    require(_id < latestProposalId, 'Proposal not found'); // pas obligé, et pas besoin du >0 car uint
 
     voters[msg.sender].votedProposalId = _id;
     voters[msg.sender].hasVoted = true;
-    proposalsArray[_id].voteCount++;
-
+    unchecked { ++proposalsMapping[_id].voteCount; }
     // To prevent DOS gas limit attack, we update the winning id after each new vote
-    if (proposalsArray[_id].voteCount > proposalsArray[winningProposalID].voteCount) {
+    if (proposalsMapping[_id].voteCount > proposalsMapping[winningProposalID].voteCount) {
       winningProposalID = _id;
     }
     emit Voted(msg.sender, _id);
@@ -183,7 +186,7 @@ contract Voting is Ownable {
 
     Proposal memory proposal;
     proposal.description = 'GENESIS';
-    proposalsArray.push(proposal);
+    proposalsMapping[latestProposalId++] = proposal;
 
     emit WorkflowStatusChange(
       WorkflowStatus.RegisteringVoters,
