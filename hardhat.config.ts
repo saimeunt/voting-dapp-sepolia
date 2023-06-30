@@ -1,7 +1,7 @@
 import { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
 import * as dotenv from 'dotenv';
-require("hardhat-gas-reporter");
+require('hardhat-gas-reporter');
 
 dotenv.config({ path: '.env.local' });
 
@@ -11,7 +11,7 @@ const config = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 100000,
+        runs: 200,
       },
     },
   },
@@ -22,8 +22,8 @@ const config = {
     },
   },
   gasReporter: {
-    enabled: true
-  }
+    enabled: true,
+  },
 
   /* etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
