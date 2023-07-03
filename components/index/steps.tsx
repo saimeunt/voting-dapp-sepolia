@@ -77,12 +77,28 @@ const Steps = ({ status, isOwner }: { status: WorkflowStatus; isOwner: boolean }
     useEndProposalsRegistering(onError);
   const { data: startVotingSessionData, startVotingSession } = useStartVotingSession(onError);
   const { data: endVotingSessionData, endVotingSession } = useEndVotingSession(onError);
-  const { isLoading } = useWaitForTransaction({
+  /* const { isLoading } = useWaitForTransaction({
     hash:
       startProposalsRegisteringData?.hash ||
       endProposalsRegisteringData?.hash ||
       startVotingSessionData?.hash ||
       endVotingSessionData?.hash,
+    onSuccess: () => router.refresh(),
+  }); */
+  const { isLoading: startProposalsRegisteringIsLoading } = useWaitForTransaction({
+    hash: startProposalsRegisteringData?.hash,
+    onSuccess: () => router.refresh(),
+  });
+  const { isLoading: endProposalsRegisteringIsLoading } = useWaitForTransaction({
+    hash: endProposalsRegisteringData?.hash,
+    onSuccess: () => router.refresh(),
+  });
+  const { isLoading: startVotingSessionIsLoading } = useWaitForTransaction({
+    hash: startVotingSessionData?.hash,
+    onSuccess: () => router.refresh(),
+  });
+  const { isLoading: endVotingSessionIsLoading } = useWaitForTransaction({
+    hash: endVotingSessionData?.hash,
     onSuccess: () => router.refresh(),
   });
   const steps = [
@@ -92,22 +108,30 @@ const Steps = ({ status, isOwner }: { status: WorkflowStatus; isOwner: boolean }
     },
     {
       id: WorkflowStatuses.ProposalsRegistrationStarted,
-      name: `Start${isLoading ? 'ing' : ''} proposals registering${isLoading ? '…' : ''}`,
+      name: `Start${startProposalsRegisteringIsLoading ? 'ing' : ''} proposals registering${
+        startProposalsRegisteringIsLoading ? '…' : ''
+      }`,
       onClick: startProposalsRegistering,
     },
     {
       id: WorkflowStatuses.ProposalsRegistrationEnded,
-      name: `End${isLoading ? 'ing' : ''} proposals registering${isLoading ? '…' : ''}`,
+      name: `End${endProposalsRegisteringIsLoading ? 'ing' : ''} proposals registering${
+        endProposalsRegisteringIsLoading ? '…' : ''
+      }`,
       onClick: endProposalsRegistering,
     },
     {
       id: WorkflowStatuses.VotingSessionStarted,
-      name: `Start${isLoading ? 'ing' : ''} voting session${isLoading ? '…' : ''}`,
+      name: `Start${startVotingSessionIsLoading ? 'ing' : ''} voting session${
+        startVotingSessionIsLoading ? '…' : ''
+      }`,
       onClick: startVotingSession,
     },
     {
       id: WorkflowStatuses.VotingSessionEnded,
-      name: `End${isLoading ? 'ing' : ''} voting session${isLoading ? '…' : ''}`,
+      name: `End${endVotingSessionIsLoading ? 'ing' : ''} voting session${
+        endVotingSessionIsLoading ? '…' : ''
+      }`,
       onClick: endVotingSession,
     },
   ];

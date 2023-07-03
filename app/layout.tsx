@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import 'tailwindcss/tailwind.css';
 import '@rainbow-me/rainbowkit/styles.css';
+import './style.css';
 
 import Providers from '../components/lib/providers';
 import Header from '../components/header';

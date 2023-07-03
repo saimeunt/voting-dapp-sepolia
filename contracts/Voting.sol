@@ -53,7 +53,7 @@ contract Voting is Ownable {
   uint latestProposalId;
   WorkflowStatus public workflowStatus;
 
-  mapping (uint => Proposal) proposalsMapping;
+  mapping(uint => Proposal) proposalsMapping;
   mapping(address => Voter) voters;
 
   /**
@@ -144,7 +144,9 @@ contract Voting is Ownable {
     Proposal memory proposal;
     proposal.description = _desc;
     proposalsMapping[latestProposalId] = proposal;
-    unchecked{++latestProposalId;}
+    unchecked {
+      ++latestProposalId;
+    }
     emit ProposalRegistered(latestProposalId - 1);
   }
 
@@ -164,7 +166,9 @@ contract Voting is Ownable {
 
     voters[msg.sender].votedProposalId = _id;
     voters[msg.sender].hasVoted = true;
-    unchecked { ++proposalsMapping[_id].voteCount; }
+    unchecked {
+      ++proposalsMapping[_id].voteCount;
+    }
     // To prevent DOS gas limit attack, we update the winning id after each new vote
     if (proposalsMapping[_id].voteCount > proposalsMapping[winningProposalID].voteCount) {
       winningProposalID = _id;

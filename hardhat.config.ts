@@ -24,10 +24,9 @@ const config = {
   gasReporter: {
     enabled: true,
   },
-
-  /* etherscan: {
+  etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
-  }, */
+  },
 } satisfies HardhatUserConfig;
 
 export default config;
